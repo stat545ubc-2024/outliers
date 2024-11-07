@@ -1,0 +1,88 @@
+---
+output: github_document
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# outliers
+
+## Description
+
+The outliers package provides a function, check_outliers(), to detect and return outliers in numeric vectors. It supports two commonly used methods: Z-score, which identifies data points that deviate significantly from the mean, and the Interquartile Range (IQR), which finds extreme values based on quartiles. The package offers flexibility to customize thresholds for both methods, customize the quantile algorithm type for the IQR method, and automatically handles missing values.
+
+## Installation
+
+You can install the development version of outliers from [GitHub](https://github.com/) with:
+
+``` r
+# Install the `devtools` package if you have not already
+# install.packages("devtools")
+library(devtools)
+devtools::install_github("stat545ubc-2024/outliers", ref = "0.1.0")
+```
+
+## Examples
+
+Here are some examples on how to use `check_outliers` in your work:
+
+### Example 1 - Simple vector with outliers for both methods
+
+```{r example1}
+library(outliers)
+
+vec_1 <- c(1:20, 80000)
+
+check_outliers(vec_1, "iqr")
+check_outliers(vec_1, "zscore")
+
+```
+
+
+### Example 2 - Simple vector with no outliers
+
+```{r example2}
+vec_2 <-c(1:5)
+
+check_outliers(vec_2, "iqr")
+check_outliers(vec_2, "zscore")
+
+```
+
+### Example 3 - Simple vector with outliers for one method, not the other
+
+```{r example3}
+vec_3 <- c(0:10, -300, 500)
+
+check_outliers(vec_3, "iqr")
+
+
+# However, if that same vector is checked using the Z-score method...
+check_outliers(vec_3, "zscore")
+```
+
+### Example 4 - Adjusting the threshold values
+
+```{r example4}
+check_outliers(vec_3, "zscore", zscore_threshold = 1.5)
+```
+
+### Example 5 - Sample dataset
+
+```{r example5}
+# install.packages("gapminder")
+library(gapminder)
+
+# Lets check for outliers within the population variable, 'pop' in the gapminder dataset
+
+check_outliers(gapminder$pop, "iqr")
+check_outliers(gapminder$pop, "zscore")
+
+```
+
